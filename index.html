@@ -3,67 +3,200 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>RPS Ultimate | Portfolio</title>
+    <title>Arcade Hub | v3.2 Ultra</title>
     <link rel="stylesheet" href="style.css" />
   </head>
-  <body>
+  <body data-theme="cyber">
+    <div id="start-overlay">
+      <div class="start-content">
+        <div class="spinner"></div>
+        <h1 class="glitch-effect" data-text="SYSTEM_READY">SYSTEM_READY</h1>
+        <p>CLICK TO INITIALIZE INTERFACE</p>
+        <span class="version-tag">v3.2_ULTRA_STABLE</span>
+      </div>
+    </div>
+
+    <div id="scanlines"></div>
     <div id="cursor-blur"></div>
     <div class="bg-mesh"></div>
+    <canvas id="particle-canvas"></canvas>
+
+    <nav class="glass-nav">
+      <div class="nav-left">
+        <div class="nav-logo glitch-hover" data-text="ARCADE_HUB">
+          ARCADE_HUB
+        </div>
+        <div class="sys-stat">
+          <span id="clock">00:00:00</span>
+          <span id="fps-counter">60FPS</span>
+        </div>
+      </div>
+
+      <div class="nav-center">
+        <canvas id="audio-visualizer"></canvas>
+      </div>
+
+      <div class="nav-right">
+        <div class="nav-links">
+          <a href="#work" class="magnetic">PROJECTS</a>
+          <a
+            href="https://github.com/user1thegreat"
+            target="_blank"
+            class="magnetic"
+            >SOURCE</a
+          >
+        </div>
+        <button id="settings-btn" class="icon-btn magnetic">⚙️</button>
+      </div>
+    </nav>
 
     <main class="content-wrapper">
-      <nav class="glass-nav">
-        <div class="nav-logo">System Pro <span class="version">v1.0</span></div>
-        <div class="nav-links">
-          <a href="#work">PROJECTS</a>
-          <a href="https://github.com/user1thegreat" target="_blank">GITHUB</a>
-        </div>
-      </nav>
-
       <header class="hero-section">
         <div class="status-indicator">
           <span class="pulse-dot"></span>
-          <span class="mono-text">ALL SYSTEMS OPERATIONAL</span>
+          <span class="mono-text">CORE_STABLE_V3.2</span>
         </div>
-        <h1 class="reveal-text">Rock Paper Scissors Ultimate</h1>
+        <h1 class="reveal-text glitch-effect" data-text="MY GAMES">MY GAMES</h1>
         <p id="typewriter" class="mono-text"></p>
       </header>
 
-      <section id="work" class="project-section">
-        <div class="glass-card main-project" id="neon-pulse-card">
+      <section id="work" class="project-grid">
+        <div class="glass-card project-card magnetic-card" data-tilt>
           <div class="card-inner">
             <div class="card-info">
-              <span class="tag">FLAGSHIP ENGINE</span>
+              <span class="tag blue">STRATEGY ENGINE</span>
               <h2>NEON-PULSE RPS</h2>
               <p>
-                A high-performance Rock-Paper-Scissors engine featuring
-                procedural Web Audio synthesis, dynamic ambient lighting, and
-                GPU-accelerated glassmorphism.
+                High-fidelity Rock-Paper-Scissors with procedural audio and
+                haptic feedback.
               </p>
               <div class="tech-pills">
-                <span>VANILLA_JS</span>
-                <span>WEB_AUDIO</span>
-                <span>CSS_FX</span>
+                <span>JS_AUDIO</span>
+                <span>HAPTICS</span>
               </div>
               <a
                 href="https://user1thegreat.github.io/Ultimate-Rock-Paper-Scissors/"
                 target="_blank"
-                class="primary-btn"
-                >LAUNCH ENGINE ➔</a
+                class="primary-btn blue-btn magnetic"
+                >PLAY NOW ➔</a
               >
             </div>
             <div class="card-visual">
-              <div class="neon-orb"></div>
-              <div class="visual-icons">👊 ✋ ✌️</div>
+              <div class="neon-orb blue-orb"></div>
+              <div class="visual-icon">👊</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card project-card magnetic-card" data-tilt>
+          <div class="card-inner">
+            <div class="card-info">
+              <span class="tag orange">PHYSICS PLAYGROUND</span>
+              <h2>OMNIBOX SANDBOX</h2>
+              <p>
+                An experimental physics container testing browser capabilities
+                and logic limits.
+              </p>
+              <div class="tech-pills">
+                <span>PHYSICS</span>
+                <span>DOM_MANIP</span>
+              </div>
+              <a
+                href="https://user1thegreat.github.io/Omnibox-Sandbox/"
+                target="_blank"
+                class="primary-btn orange-btn magnetic"
+                >ENTER BOX ➔</a
+              >
+            </div>
+            <div class="card-visual">
+              <div class="neon-orb orange-orb"></div>
+              <div class="visual-icon">📦</div>
             </div>
           </div>
         </div>
       </section>
 
       <footer>
-        <p class="mono-text">ENCRYPTED PORTFOLIO // 2026</p>
+        <p class="mono-text">ENGINEERED BY USER1THEGREAT // 2026</p>
       </footer>
     </main>
 
+    <div id="settings-modal" class="modal-overlay">
+      <div class="glass-panel modal-content">
+        <div class="modal-header">
+          <h2>CONTROL PANEL</h2>
+          <button id="close-settings" class="close-btn">×</button>
+        </div>
+
+        <div class="settings-scroll-area">
+          <div class="setting-section">
+            <h3>// VISUAL_THEMES</h3>
+            <div class="theme-grid">
+              <button class="theme-btn active" data-set-theme="cyber">
+                CYBER
+              </button>
+              <button class="theme-btn" data-set-theme="light">SERENE</button>
+              <button class="theme-btn" data-set-theme="matrix">MATRIX</button>
+              <button class="theme-btn" data-set-theme="vapor">VAPOR</button>
+              <button class="theme-btn" data-set-theme="stealth">
+                STEALTH
+              </button>
+            </div>
+          </div>
+
+          <div class="setting-section">
+            <h3>// GRAPHICS_ENGINE</h3>
+            <div class="setting-row">
+              <label>Scanline Overlay</label
+              ><input type="checkbox" id="set-scanlines" checked />
+            </div>
+            <div class="setting-row">
+              <label>Particle System</label
+              ><input type="checkbox" id="set-particles" checked />
+            </div>
+            <div class="setting-row">
+              <label>Cursor Glow</label
+              ><input type="checkbox" id="set-glow" checked />
+            </div>
+            <div class="setting-row">
+              <label>3D Card Tilt</label
+              ><input type="checkbox" id="set-tilt" checked />
+            </div>
+            <div class="setting-row">
+              <label>Magnetic Buttons</label
+              ><input type="checkbox" id="set-magnet" checked />
+            </div>
+          </div>
+
+          <div class="setting-section">
+            <h3>// AUDIO_CORE</h3>
+            <div class="setting-row">
+              <label>Master Audio</label
+              ><input type="checkbox" id="set-audio" checked />
+            </div>
+            <div class="setting-row">
+              <label>UI Click SFX</label
+              ><input type="checkbox" id="set-sfx" checked />
+            </div>
+          </div>
+
+          <div class="setting-section">
+            <h3>// SYSTEM</h3>
+            <div class="setting-row">
+              <label>FPS Counter</label
+              ><input type="checkbox" id="set-fps" checked />
+            </div>
+            <div class="setting-row">
+              <label>Digital Clock</label
+              ><input type="checkbox" id="set-clock" checked />
+            </div>
+            <button id="reset-all" class="danger-btn">FACTORY RESET</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast-container"></div>
     <script src="script.js"></script>
   </body>
 </html>

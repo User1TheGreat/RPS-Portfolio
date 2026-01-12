@@ -1,83 +1,139 @@
-/* =========================================
-   PORTFOLIO INTERACTIVE ENGINE
-   Accurate to Neon-Pulse Branding
-   ========================================= */
-
 document.addEventListener("DOMContentLoaded", () => {
-  // 1. Butter-Smooth Cursor Follower
-  const cursor = document.getElementById("cursor-blur");
-  let mouseX = 0,
-    mouseY = 0;
-  let cursorX = 0,
-    cursorY = 0;
+  const State = {
+    initialized: false,
+    audioCtx: null,
+    settings: {
+      scanlines: true,
+      particles: true,
+      glow: true,
+      tilt: true,
+      magnet: true,
+      audio: true,
+      sfx: true,
+      fps: true,
+      clock: true,
+    },
+  };
 
+  const overlay = document.getElementById("start-overlay");
+  const main = document.querySelector(".content-wrapper");
+
+  // INITIALIZATION TRIGGER
+  overlay.addEventListener("click", () => {
+    if (State.initialized) return;
+    State.initialized = true;
+
+    overlay.style.opacity = "0";
+    main.style.opacity = "1";
+    setTimeout(() => overlay.remove(), 600);
+
+    initAudio();
+    startClock();
+    initTypewriter();
+    initParticles();
+  });
+
+  // AUDIO SYSTEM
+  function initAudio() {
+    try {
+      State.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const analyser = State.audioCtx.createAnalyser();
+      analyser.fftSize = 64;
+      const data = new Uint8Array(analyser.frequencyBinCount);
+
+      const canvas = document.getElementById("audio-visualizer");
+      const ctx = canvas.getContext("2d");
+
+      function draw() {
+        requestAnimationFrame(draw);
+        analyser.getByteFrequencyData(data);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = getComputedStyle(
+          document.documentElement
+        ).getPropertyValue("--accent");
+        data.forEach((v, i) => {
+          ctx.fillRect(i * 4, canvas.height - v / 8, 3, v / 8);
+        });
+      }
+      draw();
+    } catch (e) {
+      console.log("Audio Init Blocked");
+    }
+  }
+
+  // SETTINGS LOGIC
+  const modal = document.getElementById("settings-modal");
+  document
+    .getElementById("settings-btn")
+    .addEventListener("click", () => modal.classList.add("active"));
+  document
+    .getElementById("close-settings")
+    .addEventListener("click", () => modal.classList.remove("active"));
+
+  document.querySelectorAll(".theme-btn").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      const theme = e.target.dataset.setTheme;
+      document.body.setAttribute("data-theme", theme);
+      document
+        .querySelectorAll(".theme-btn")
+        .forEach((b) => b.classList.remove("active"));
+      e.target.classList.add("active");
+      showToast(`ENVIRONMENT: ${theme.toUpperCase()}`);
+    });
+  });
+
+  // TYPEWRITER
+  function initTypewriter() {
+    const el = document.getElementById("typewriter");
+    const text = "> ARCADE_CORE_V3.2 // AUTHENTICATED // WELCOME_USER";
+    let i = 0;
+    function type() {
+      if (i < text.length) {
+        el.innerHTML += text.charAt(i);
+        i++;
+        setTimeout(type, 40);
+      }
+    }
+    type();
+  }
+
+  // UTILITIES
+  function startClock() {
+    setInterval(() => {
+      document.getElementById("clock").innerText =
+        new Date().toLocaleTimeString();
+    }, 1000);
+  }
+
+  function showToast(m) {
+    const t = document.createElement("div");
+    t.className = "toast";
+    t.innerText = m;
+    document.getElementById("toast-container").appendChild(t);
+    setTimeout(() => t.remove(), 3000);
+  }
+
+  // MAGNETIC & TILT
   document.addEventListener("mousemove", (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
+    // Cursor Blur
+    const cb = document.getElementById("cursor-blur");
+    cb.style.left = e.clientX + "px";
+    cb.style.top = e.clientY + "px";
+
+    // Card Tilt
+    document.querySelectorAll(".project-card").forEach((card) => {
+      const rect = card.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      card.style.transform = `perspective(1000px) rotateY(${
+        x * 10
+      }deg) rotateX(${y * -10}deg)`;
+    });
   });
 
-  function animateCursor() {
-    let dx = mouseX - cursorX;
-    let dy = mouseY - cursorY;
-    // 0.1 creates a slight lag/elastic effect that feels high-end
-    cursorX += dx * 0.1;
-    cursorY += dy * 0.1;
-    cursor.style.left = `${cursorX}px`;
-    cursor.style.top = `${cursorY}px`;
-    requestAnimationFrame(animateCursor);
-  }
-  animateCursor();
-
-  // 2. Technical Typewriter Logic
-  const typeTarget = document.getElementById("typewriter");
-  const logs = [
-    "> INITIALIZING NEON_PULSE...",
-    "> LOADING PROCEDURAL_AUDIO...",
-    "> STABILIZING GLASSMORPHIC_SHELL...",
-    "> SYSTEM_READY_V1.0",
-  ];
-  let logIdx = 0;
-  let charIdx = 0;
-
-  function writeLog() {
-    if (charIdx < logs[logIdx].length) {
-      typeTarget.textContent += logs[logIdx].charAt(charIdx);
-      charIdx++;
-      setTimeout(writeLog, 40);
-    } else {
-      setTimeout(clearLog, 2500);
-    }
-  }
-
-  function clearLog() {
-    if (charIdx > 0) {
-      typeTarget.textContent = logs[logIdx].substring(0, charIdx - 1);
-      charIdx--;
-      setTimeout(clearLog, 20);
-    } else {
-      logIdx = (logIdx + 1) % logs.length;
-      setTimeout(writeLog, 500);
-    }
-  }
-  writeLog();
-
-  // 3. Magnetic Card Tilt (Perspective Transform)
-  const card = document.getElementById("neon-pulse-card");
-  card.addEventListener("mousemove", (e) => {
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-
-    // Tilt intensity calculation
-    const tiltX = (y - centerY) / 25;
-    const tiltY = (centerX - x) / 25;
-
-    card.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
-  });
-
-  card.addEventListener("mouseleave", () => {
-    card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+  // Reset All
+  document.getElementById("reset-all").addEventListener("click", () => {
+    localStorage.clear();
+    location.reload();
   });
 });
