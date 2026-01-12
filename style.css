@@ -1,0 +1,232 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;700&family=JetBrains+Mono&display=swap");
+
+:root {
+  --bg: #020617;
+  --accent: #38bdf8;
+  --card-bg: rgba(15, 23, 42, 0.7);
+  --text: #f1f5f9;
+}
+
+/* BUG FIX: Set cursor to default so it is visible */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  cursor: default;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: "Space Grotesk", sans-serif;
+  overflow-x: hidden;
+}
+
+/* Custom Cursor Tracker Blur */
+#cursor-blur {
+  position: fixed;
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(
+    circle,
+    rgba(56, 189, 248, 0.12) 0%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease-out;
+}
+
+.bg-mesh {
+  position: fixed;
+  inset: 0;
+  background-image: linear-gradient(
+      rgba(56, 189, 248, 0.03) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(56, 189, 248, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  z-index: -1;
+}
+
+.content-wrapper {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 10;
+}
+
+/* Navigation */
+.glass-nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 3rem 0;
+  align-items: center;
+}
+.nav-logo {
+  font-weight: 700;
+  letter-spacing: 4px;
+  font-size: 0.9rem;
+  color: var(--accent);
+}
+.version {
+  opacity: 0.3;
+  font-size: 0.6rem;
+  margin-left: 5px;
+}
+.nav-links a {
+  text-decoration: none;
+  color: inherit;
+  font-family: "JetBrains Mono";
+  font-size: 0.7rem;
+  margin-left: 2rem;
+  opacity: 0.5;
+  transition: 0.3s;
+  cursor: pointer;
+}
+.nav-links a:hover {
+  opacity: 1;
+  color: var(--accent);
+}
+
+/* Hero Section */
+.hero-section {
+  height: 60vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 1.5rem;
+}
+.pulse-dot {
+  width: 6px;
+  height: 6px;
+  background: #10b981;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #10b981;
+  animation: pulseFade 2s infinite;
+}
+h1 {
+  font-size: clamp(3.5rem, 12vw, 7rem);
+  line-height: 0.85;
+  letter-spacing: -4px;
+  margin-bottom: 1rem;
+}
+.mono-text {
+  font-family: "JetBrains Mono";
+  font-size: 0.8rem;
+  opacity: 0.4;
+  text-transform: uppercase;
+  min-height: 1.2rem;
+}
+
+/* Project Card */
+.glass-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 2.5rem;
+  padding: 4rem;
+  transition: 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.card-inner {
+  display: grid;
+  grid-template-columns: 1.4fr 0.6fr;
+  gap: 4rem;
+  align-items: center;
+}
+.tag {
+  font-family: "JetBrains Mono";
+  color: var(--accent);
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+}
+h2 {
+  font-size: 3rem;
+  margin: 1rem 0;
+  letter-spacing: -1px;
+}
+.tech-pills {
+  display: flex;
+  gap: 12px;
+  margin: 2rem 0;
+}
+.tech-pills span {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 0.65rem;
+  font-family: "JetBrains Mono";
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.primary-btn {
+  display: inline-block;
+  padding: 1.2rem 2.5rem;
+  background: var(--accent);
+  color: var(--bg);
+  text-decoration: none;
+  font-weight: 700;
+  border-radius: 12px;
+  transition: 0.4s;
+  cursor: pointer;
+}
+.primary-btn:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(56, 189, 248, 0.3);
+}
+
+/* Visual Orb Animation */
+.card-visual {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+}
+.neon-orb {
+  width: 180px;
+  height: 180px;
+  background: var(--accent);
+  filter: blur(60px);
+  opacity: 0.2;
+  animation: orbMove 6s infinite alternate;
+}
+.visual-icons {
+  position: absolute;
+  font-size: 3rem;
+  letter-spacing: 10px;
+  opacity: 0.8;
+}
+
+@keyframes pulseFade {
+  0% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.4;
+  }
+}
+@keyframes orbMove {
+  from {
+    transform: translate(-20px, -20px);
+  }
+  to {
+    transform: translate(20px, 20px);
+  }
+}
+
+footer {
+  padding: 8rem 0 4rem;
+  text-align: center;
+}
