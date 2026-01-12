@@ -1,2 +1,2 @@
-# RPS-Portfolio
-The Portfolio for Ultimate Rock Paper Scissors
+# My Games
+The Website for User1TheGreat's games!
